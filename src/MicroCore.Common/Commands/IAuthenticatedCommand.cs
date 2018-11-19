@@ -1,4 +1,4 @@
-namespace MicroCore.Common
+namespace MicroCore.Common.Commands
 {
     public interface IAuthenticatedCommand : ICommand
     {

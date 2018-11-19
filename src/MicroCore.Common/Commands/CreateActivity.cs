@@ -1,4 +1,4 @@
-namespace MicroCore.Common
+namespace MicroCore.Common.Commands
 {
     using System;
     public class CreateActivity : IAuthenticatedCommand

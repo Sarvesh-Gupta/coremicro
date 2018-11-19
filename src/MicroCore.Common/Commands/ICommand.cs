@@ -1,4 +1,4 @@
-namespace MicroCore.Common
+namespace MicroCore.Common.Commands
 {
     // marker interface
     public interface ICommand
