@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="microsoft.aspnetcore" Version="2.1.6" />
+    <PackageReference Include="microsoft.aspnetcore.hosting" Version="2.1.1" />
+    <PackageReference Include="rawrabbit" Version="1.10.4" />
+  </ItemGroup>
+
 </Project>

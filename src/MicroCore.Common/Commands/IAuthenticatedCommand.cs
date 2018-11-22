@@ -1,7 +1,8 @@
 namespace MicroCore.Common.Commands
 {
+    using System;
     public interface IAuthenticatedCommand : ICommand
     {
-        int UserId { get; set; }
+        Guid UserId { get; set; }
     }
 }
