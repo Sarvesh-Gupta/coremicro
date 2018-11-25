@@ -4,6 +4,7 @@ namespace MicroCore.Common.Services
     using System.Threading.Tasks;
     using MicroCore.Common.Commands;
     using MicroCore.Common.Events;
+    using MicroCore.Common.RabbitMq;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
