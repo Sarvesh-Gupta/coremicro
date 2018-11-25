@@ -4,7 +4,11 @@ namespace MicroCore.Common.RabbitMq
     using System.Threading.Tasks;
     using MicroCore.Common.Commands;
     using MicroCore.Common.Events;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using RawRabbit;
+    using RawRabbit.Instantiation;
+
     public static class Extensions
     {
         public static Task WithEventHandlerAsync<TEvent>(this IBusClient bus, IEventHandler<TEvent> handler)
@@ -18,6 +22,20 @@ namespace MicroCore.Common.RabbitMq
         => bus.SubscribeAsync<TCommand>(msg => handler.HandleAsync(msg),
         ctx => ctx.UseSubscribeConfiguration(cfg => 
         cfg.FromDeclaredQueue(q => q.WithName(GetQueueName<TCommand>()))));
+
+        public static void AddRabbitMq(this IServiceCollection services, IConfiguration config)
+        {
+            var options = new RabbitMqOptions();
+            var section = config.GetSection("rabbitmq");
+            section.Bind(options);
+
+            var client = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
+            {
+                ClientConfiguration = options
+            });
+
+            services.AddSingleton<IBusClient>(_ => client);
+        }
 
         private static string GetQueueName<T>()
            => $"{Assembly.GetEntryAssembly().GetName()}/{typeof(T).Name}";

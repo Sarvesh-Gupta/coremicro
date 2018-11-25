@@ -6,6 +6,6 @@ namespace MicroCore.Common.Services
      commands and events to subscribe to */
     public interface IServiceHost
     {
-        Task Run();
+        Task RunAsync();
     }
 }

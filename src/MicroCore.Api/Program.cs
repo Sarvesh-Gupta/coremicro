@@ -1,24 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-namespace MicroCore.Api
+﻿namespace MicroCore.Api
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using MicroCore.Common.Events;
+    using MicroCore.Common.Services;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
     public class Program
     {
         public static async Task Main(string[] args)
         {
-           await CreateWebHostBuilder(args).Build().RunAsync();
+            await ServiceHost.Create<Startup>(args)
+            .UserRabbitMq()
+            .SubscribeToEvent<ActivityCreated>()
+            .Build()
+            .RunAsync();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
     }
 }

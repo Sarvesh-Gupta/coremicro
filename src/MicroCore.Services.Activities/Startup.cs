@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroCore.Common.Commands;
+using MicroCore.Common.RabbitMq;
+using MicroCore.Services.Activities.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +29,11 @@ namespace MicroCore.Services.Activities
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Configure service-bus
+            services.AddRabbitMq(Configuration);
+            // Add event handler for activity created
+            services.AddScoped<ICommandHandler<CreateActivity>, CreateActivityHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

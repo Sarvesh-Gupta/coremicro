@@ -19,7 +19,7 @@ namespace MicroCore.Common.Services
             _webhost = webHost;
         }
 
-        public async Task Run() => await _webhost.RunAsync();
+        public async Task RunAsync() => await _webhost.RunAsync();
 
         public static HostBuilder Create<TStartup>(string[] args) where TStartup : class
         {
