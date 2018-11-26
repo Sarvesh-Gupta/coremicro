@@ -8,6 +8,7 @@ namespace MicroCore.Common.Services
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using RawRabbit;
 
     public class ServiceHost : IServiceHost
@@ -68,18 +69,18 @@ namespace MicroCore.Common.Services
 
     public class BusBuilder : BuilderBase
     {
-        private readonly IWebHost _webhost;
+        private readonly IWebHost _webHost;
         private readonly IBusClient _bus;
 
-        public BusBuilder(IWebHost webhost, IBusClient bus)
+        public BusBuilder(IWebHost webHost, IBusClient bus)
         {
-            _webhost = webhost;
+            _webHost = webHost;
             _bus = bus;
         }
 
         public BusBuilder SubscribeToCommand<TCommand>() where TCommand : ICommand
         {
-            var handler = (ICommandHandler<TCommand>)_webhost.Services.GetService(typeof(ICommandHandler<TCommand>));
+            var handler = (ICommandHandler<TCommand>)_webHost.Services.GetService(typeof(ICommandHandler<TCommand>));
             _bus.WithCommandHandlerAsync(handler);
 
             return this;
@@ -87,14 +88,18 @@ namespace MicroCore.Common.Services
 
         public BusBuilder SubscribeToEvent<TEvent>() where TEvent : IEvent
         {
-            var handler = (IEventHandler<TEvent>)_webhost.Services.GetService(typeof(IEventHandler<TEvent>));
-            _bus.WithEventHandlerAsync(handler);
+             using (var serviceScope = _webHost.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+             {
+                  var handler = (IEventHandler<TEvent>)serviceScope.ServiceProvider.GetService(typeof(IEventHandler<TEvent>));
+                _bus.WithEventHandlerAsync(handler);
 
-            return this;
+                return this;   
+             }
+           
         }
         public override ServiceHost Build()
         {
-            return new ServiceHost(_webhost);
+            return new ServiceHost(_webHost);
         }
     }
 }
