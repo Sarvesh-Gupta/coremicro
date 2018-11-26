@@ -80,22 +80,25 @@ namespace MicroCore.Common.Services
 
         public BusBuilder SubscribeToCommand<TCommand>() where TCommand : ICommand
         {
-            var handler = (ICommandHandler<TCommand>)_webHost.Services.GetService(typeof(ICommandHandler<TCommand>));
-            _bus.WithCommandHandlerAsync(handler);
+            using (var serviceScope = _webHost.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var handler = (ICommandHandler<TCommand>)serviceScope.ServiceProvider.GetService(typeof(ICommandHandler<TCommand>));
+                _bus.WithCommandHandlerAsync(handler);
 
-            return this;
+                return this;
+            }
         }
 
         public BusBuilder SubscribeToEvent<TEvent>() where TEvent : IEvent
         {
-             using (var serviceScope = _webHost.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-             {
-                  var handler = (IEventHandler<TEvent>)serviceScope.ServiceProvider.GetService(typeof(IEventHandler<TEvent>));
+            using (var serviceScope = _webHost.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var handler = (IEventHandler<TEvent>)serviceScope.ServiceProvider.GetService(typeof(IEventHandler<TEvent>));
                 _bus.WithEventHandlerAsync(handler);
 
-                return this;   
-             }
-           
+                return this;
+            }
+
         }
         public override ServiceHost Build()
         {
