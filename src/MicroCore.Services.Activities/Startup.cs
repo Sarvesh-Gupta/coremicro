@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MicroCore.Common.Commands;
+using MicroCore.Common.Mongo;
 using MicroCore.Common.RabbitMq;
 using MicroCore.Services.Activities.Handlers;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,8 @@ namespace MicroCore.Services.Activities
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddLogging();
+            services.AddMongoDB(Configuration);
 
             // Configure service-bus
             services.AddRabbitMq(Configuration);
