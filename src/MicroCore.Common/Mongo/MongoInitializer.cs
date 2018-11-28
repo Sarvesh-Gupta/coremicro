@@ -58,6 +58,4 @@ namespace MicroCore.Common.Mongo
             };
         }
     }
-
-
 }

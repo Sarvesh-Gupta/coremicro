@@ -6,7 +6,7 @@ namespace MicroCore.Services.Activities.Domain.Repositories
 {
     public interface IActivityRepository
     {
-         Task<Activity> Get(Guid id);
+         Task<Activity> GetAsync(Guid id);
 
          Task Add(Activity activity);
     }
