@@ -25,6 +25,7 @@ namespace MicroCore.Api.Controllers
             await _bus.PublishAsync(command);
 
             return Accepted($"activities/{command.Id}");
+            
         }
     }
 }
